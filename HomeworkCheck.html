@@ -1,10 +1,10 @@
 
-      <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework Check • General Economic English</title>
+  <title>Homework Check • General Economic English (Week 2)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
@@ -25,8 +25,8 @@
         <i class="fa-solid fa-graduation-cap text-2xl"></i>
         <span class="text-sm font-bold uppercase tracking-wider">General Economic English</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Homework Check — Week 1</h1>
-      <p class="text-slate-600 text-sm mt-1">Complete all 20 questions below and click <b>Submit Homework</b> to view your results.</p>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Homework Check — Week 2</h1>
+      <p class="text-slate-600 text-sm mt-1">Economic Agents and Economic Activities. Complete all 20 questions below and click <b>Submit Homework</b>.</p>
     </div>
 
     <!-- Student Details Form -->
@@ -116,8 +116,10 @@
       { id: 20, q: "Which field focuses on planning and organizing people and resources?", options: ["Management", "Finance", "Economics", "Business"], ans: 0 }
     ];
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhifnOdNj47nNWRz6iVp3Kqo7Ufg17YxGRm8ofrB4NFd1ebzhhauWw-e9athsOIqRr/exec";
-
+    // Updated Google Apps Script Exec URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylfIr2M3JpP-ncNV_B1IUvz5jzqdYHDCGRR4Pm71U6V7igMh0V74Wel8Rg4hYFAwoY/exec";
+    
+    let startTime = Date.now();
     const container = document.getElementById('questionsContainer');
 
     // Render questions
@@ -170,21 +172,19 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Calculating Results...`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting...`;
       statusMsg.className = "text-sm text-sky-600 font-medium block";
-      statusMsg.textContent = "Submitting your responses and scoring...";
+      statusMsg.textContent = "Submitting your responses and recording score...";
 
       let score = 0;
-      let rawAnswers = [];
 
-      // Grade and highlight questions
+      // Grade questions
       quizData.forEach((item, index) => {
         const selected = document.querySelector(`input[name="q${index}"]:checked`);
         const userVal = selected ? parseInt(selected.value) : -1;
         const correctLabel = document.getElementById(`optLabel_${index}_${item.ans}`);
         const feedbackDiv = document.getElementById(`feedback_${index}`);
 
-        // Disable inputs after submit
         const inputs = document.querySelectorAll(`input[name="q${index}"]`);
         inputs.forEach(i => i.disabled = true);
 
@@ -193,7 +193,6 @@
           correctLabel.classList.add('correct-opt');
           feedbackDiv.className = "text-xs font-bold text-emerald-600 block";
           feedbackDiv.innerHTML = "✓ Correct Answer!";
-          rawAnswers.push(`Q${index+1}: Correct`);
         } else {
           if (userVal !== -1) {
             const wrongLabel = document.getElementById(`optLabel_${index}_${userVal}`);
@@ -202,31 +201,29 @@
           correctLabel.classList.add('correct-opt');
           feedbackDiv.className = "text-xs font-bold text-rose-600 block";
           feedbackDiv.innerHTML = `✗ Incorrect. Correct Answer: "${item.options[item.ans]}"`;
-          rawAnswers.push(`Q${index+1}: Wrong`);
         }
       });
 
       const percentageVal = ((score / quizData.length) * 100).toFixed(0);
-      const percentage = `${percentageVal}%`;
-      const timestamp = new Date().toLocaleString('en-US');
-      const fullName = `${firstName} ${lastName}`;
+      const timeSpentSeconds = Math.round((Date.now() - startTime) / 1000);
 
       // Update Results Banner
       document.getElementById('scoreDisplay').textContent = `${score}/${quizData.length}`;
-      document.getElementById('percentDisplay').textContent = percentage;
+      document.getElementById('percentDisplay').textContent = `${percentageVal}%`;
       
       const banner = document.getElementById('resultsBanner');
       banner.classList.remove('hidden');
       banner.scrollIntoView({ behavior: 'smooth' });
 
+      // Updated payload matching Google Apps Script (testType instead of email)
       const payload = {
-        timestamp: timestamp,
-        name: fullName,
-        studentId: "N/A",
+        firstName: firstName,
+        lastName: lastName,
+        testType: "homeworkcheck2",
         group: group,
-        score: `${score}/${quizData.length}`,
-        percentage: percentage,
-        answers: rawAnswers.join(', ')
+        score: `${score} / ${quizData.length}`,
+        percentage: `${percentageVal}%`,
+        timeUsed: `${timeSpentSeconds} seconds`
       };
 
       try {
@@ -238,11 +235,11 @@
         });
 
         statusMsg.className = "text-sm text-emerald-600 font-bold block";
-        statusMsg.textContent = "✅ Results generated and recorded successfully!";
+        statusMsg.textContent = "✅ Results recorded successfully in Google Sheets!";
         submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> Submitted & Scored`;
       } catch (err) {
         statusMsg.className = "text-sm text-amber-600 font-bold block";
-        statusMsg.textContent = "⚠️ Results displayed above, but background sheet sync failed.";
+        statusMsg.textContent = "⚠️ Results displayed, but background sheet sync failed.";
         submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> Scored`;
       }
     }
