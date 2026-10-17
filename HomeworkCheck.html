@@ -1,10 +1,9 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework Check • General Economic English (Week 2)</title>
+  <title>Homework Check • General Economic English (Week 1)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
@@ -25,8 +24,8 @@
         <i class="fa-solid fa-graduation-cap text-2xl"></i>
         <span class="text-sm font-bold uppercase tracking-wider">General Economic English</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Homework Check — Week 2</h1>
-      <p class="text-slate-600 text-sm mt-1">Economic Agents and Economic Activities. Complete all 20 questions below and click <b>Submit Homework</b>.</p>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Homework Check — Week 1</h1>
+      <p class="text-slate-600 text-sm mt-1">Introduction to Economics and Economic English. Complete all 20 questions below and click <b>Submit Homework</b>.</p>
     </div>
 
     <!-- Student Details Form -->
@@ -116,8 +115,8 @@
       { id: 20, q: "Which field focuses on planning and organizing people and resources?", options: ["Management", "Finance", "Economics", "Business"], ans: 0 }
     ];
 
-    // Updated Google Apps Script Exec URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylfIr2M3JpP-ncNV_B1IUvz5jzqdYHDCGRR4Pm71U6V7igMh0V74Wel8Rg4hYFAwoY/exec";
+    // Google Apps Script Exec URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkio7AsAzM7vOndbssXelUsaU7taDiZ5Z61Og3oozbmOHsPry_N71NRQdLD4kbGUjmwg/exec";
     
     let startTime = Date.now();
     const container = document.getElementById('questionsContainer');
@@ -215,11 +214,11 @@
       banner.classList.remove('hidden');
       banner.scrollIntoView({ behavior: 'smooth' });
 
-      // Updated payload matching Google Apps Script (testType instead of email)
+      // Payload records testType as 'homeworkcheck1' for Week 1
       const payload = {
         firstName: firstName,
         lastName: lastName,
-        testType: "homeworkcheck2",
+        testType: "homeworkcheck1",
         group: group,
         score: `${score} / ${quizData.length}`,
         percentage: `${percentageVal}%`,
